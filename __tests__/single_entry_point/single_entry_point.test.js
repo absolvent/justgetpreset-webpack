@@ -11,14 +11,22 @@
 /* eslint func-names: 0 */
 /* global describe: false, it: false */
 
+const assert = require('chai').assert;
 const MemoryFileSystem = require('memory-fs');
 const path = require('path');
 const webpack = require('../../index');
 
 describe('webpack', function () {
   it('should pack directories', function () {
-    return webpack(__dirname, './modules/*.entry.js', {
+    return webpack({
+      context: __dirname,
+      filesGlobPattern: './modules/*.entry.js',
       outputFileSystem: new MemoryFileSystem(),
+    }).then(function (results) {
+      assert.notOk(results.stats.hasWarnings());
+      assert.notOk(results.stats.hasErrors());
+
+      return results;
     });
   });
 });

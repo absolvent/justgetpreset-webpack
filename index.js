@@ -10,49 +10,52 @@
 
 /* eslint no-param-reassign: 0 */
 
-const basename = require('basename');
-const fs = require('fs');
+const basename = require('./basename');
+const fromPairs = require('lodash/fromPairs');
 const glob = require('ultra-glob');
+const NodeOutputFileSystem = require('webpack/lib/node/NodeOutputFileSystem');
 const path = require('path');
 const Promise = require('bluebird');
 const RxNode = require('rx-node');
 const webpack = require('webpack');
 
-function createFileStream(context, filesGlobPattern) {
-  return glob.readableStream(filesGlobPattern, {
-    cwd: context,
+function createFileStream(options) {
+  return glob.readableStream(options.filesGlobPattern, {
+    cwd: options.context,
   });
 }
 
-function runFiles(context, filesGlobPattern, options) {
-  return RxNode.fromReadableStream(createFileStream(context, filesGlobPattern))
-    .map(function (file) {
+function runFiles(options) {
+  return RxNode.fromReadableStream(createFileStream(options))
+    .reduce(function (fileList, file) {
+      return fileList.concat([
+        [
+          basename(file.path),
+          file.path,
+        ],
+      ]);
+    }, [])
+    .map(function (files) {
       return {
-        basename: basename(file.path),
-        path: file.path,
+        context: options.context,
+        entry: fromPairs(files),
+        output: {
+          filename: 'hello.js',
+          path: path.resolve('./'),
+        },
       };
-    })
-    .reduce(function (config, file) {
-      config.entry[file.basename] = file.path;
-
-      return config;
-    }, {
-      context,
-      entry: {},
-      output: {
-        filename: 'hello.js',
-        path: path.resolve('./'),
-      },
     })
     .toPromise(Promise)
     .then(config => webpack(config))
     .then(function (compiler) {
-      compiler.outputFileSystem = options.outputFileSystem || fs;
+      compiler.outputFileSystem = options.outputFileSystem || new NodeOutputFileSystem();
 
-      return Promise.fromCallback(cb => compiler.run(cb));
-    })
-    .then(function (stats) {
-      console.log(stats.hasErrors());
+      return Promise.fromCallback(cb => compiler.run(cb)).then(stats => {
+        return {
+          compiler,
+          stats,
+        };
+      });
     });
 }
 
