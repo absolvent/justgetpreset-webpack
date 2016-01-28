@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "basename": "^0.1.2",
+    "bluebird": "^3.1.5",
+    "eventsource-polyfill": "^0.9.6",
+    "gore-eslint": "^1.4.4",
+    "gore-mocha": "^1.1.1",
+    "lodash": "^4.0.1",
+    "rx-node": "^1.0.1",
+    "ultra-glob": "^1.1.0",
+    "webpack": "^1.12.12"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "memory-fs": "^0.3.0"
+  },
+  "description": "Wrapper around webpack for ease of use and zero configuration.",
+  "engines": {
+    "node": ">=4.0"
+  },
+  "license": "MIT",
+  "keywords": [
+    "gulp",
+    "webpack"
+  ],
+  "main": "runFiles",
+  "name": "gore-webpack",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:goreutils/gore-webpack.git"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "version": "1.0.0"
+}
