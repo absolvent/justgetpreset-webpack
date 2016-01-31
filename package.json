@@ -2,12 +2,12 @@
   "dependencies": {
     "bluebird": "^3.1.5",
     "eventsource-polyfill": "^0.9.6",
-    "gore-eslint": "^1.4.4",
-    "gore-mocha": "^1.1.1",
-    "lodash": "^4.0.1",
+    "space-preconfigured-eslint": "^1.4.4",
+    "space-preconfigured-mocha": "^1.1.1",
+    "lodash": "^4.1.0",
     "rx-node": "^1.0.1",
-    "ultra-glob": "^1.1.0",
-    "webpack": "^1.12.12"
+    "ultra-glob": "^1.1.1",
+    "webpack": "^2.0.6-beta"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -23,11 +23,11 @@
     "gulp",
     "webpack"
   ],
-  "main": "runFiles",
-  "name": "gore-webpack",
+  "main": "index",
+  "name": "space-preconfigured-webpack",
   "repository": {
     "type": "git",
-    "url": "git@github.com:goreutils/gore-webpack.git"
+    "url": "git@github.com:spacekick/space-preconfigured-webpack.git"
   },
   "scripts": {
     "test": "gulp test"

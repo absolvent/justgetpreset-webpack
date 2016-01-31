@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2016-present, goreutils
+ * @license Copyright (c) 2016-present, spacekick
  * All rights reserved.
  *
  * This source code is licensed under the MIT-style license found in the
@@ -50,12 +50,10 @@ function runFiles(options) {
     .then(function (compiler) {
       compiler.outputFileSystem = options.outputFileSystem || new NodeOutputFileSystem();
 
-      return Promise.fromCallback(cb => compiler.run(cb)).then(stats => {
-        return {
-          compiler,
-          stats,
-        };
-      });
+      return Promise.fromCallback(cb => compiler.run(cb)).then(stats => ({
+        compiler,
+        stats,
+      }));
     });
 }
 
