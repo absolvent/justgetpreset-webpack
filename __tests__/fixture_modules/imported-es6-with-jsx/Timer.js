@@ -8,8 +8,6 @@
 
 'use strict';
 
-import React from 'react';
-
 function padNumbers(number) {
   return String(100 + number).substr(1, 2);
 }

@@ -10,23 +10,16 @@
 
 /* eslint no-param-reassign: 0 */
 
+const assign = require('lodash/assign');
 const basename = require('./basename');
 const fromPairs = require('lodash/fromPairs');
 const glob = require('ultra-glob');
 const gutil = require('gulp-util');
-const merge = require('lodash/merge');
 const NodeOutputFileSystem = require('webpack/lib/node/NodeOutputFileSystem');
 const path = require('path');
 const Promise = require('bluebird');
 const RxNode = require('rx-node');
 const webpack = require('webpack');
-
-const defaultOptions = {
-  context: process.cwd(), // where to look for packages
-  filesGlobPattern: '*.entry.js', // glob pattern for entry points
-  isSilent: false, // disable console output
-  noThrow: false, // do not throw exceptions
-};
 
 function createFileStream(options) {
   return glob.readableStream(options.filesGlobPattern, {
@@ -34,8 +27,34 @@ function createFileStream(options) {
   });
 }
 
+function interpretResults(options, results) {
+  if (!options.isSilent) {
+    const stats = results.stats.toJson();
+
+    stats.warnings.forEach(gutil.log);
+    stats.errors.forEach(gutil.log);
+  }
+
+  if (!options.noThrow && results.stats.hasErrors()) {
+    throw new gutil.PluginError({
+      message: new Error('webpack detected errors'),
+      plugin: 'space-preconfigured-webpack',
+    });
+  }
+
+  return results;
+}
+
 function normalizeOptions(options) {
-  return merge({}, defaultOptions, options);
+  const defaultOptions = {
+    context: process.cwd(), // where to look for packages
+    filesGlobPattern: '*.entry.js', // glob pattern for entry points
+    isSilent: false, // disable console output
+    outputFileSystem: new NodeOutputFileSystem(),
+    noThrow: false, // do not throw exceptions
+  };
+
+  return assign({}, defaultOptions, options);
 }
 
 function runFiles(options) {
@@ -48,43 +67,39 @@ function runFiles(options) {
         ],
       ]);
     }, [])
-    .map(function (files) {
-      return {
-        context: options.context,
-        entry: fromPairs(files),
-        output: {
-          filename: 'hello.js',
-          path: path.resolve('./'),
-        },
-      };
-    })
+    .map(files => ({
+      context: options.context,
+      entry: fromPairs(files),
+      module: {
+        loaders: [
+          {
+            test: /\.jsx?$/,
+            // exclude: /(node_modules|bower_components)/,
+            loader: require.resolve('babel-loader'),
+            query: {
+              presets: [
+                require.resolve('babel-preset-es2015'),
+                require.resolve('babel-preset-react'),
+                require.resolve('babel-preset-stage-0'),
+              ],
+            },
+          },
+        ],
+      },
+      output: {
+        filename: 'hello.js',
+        path: path.resolve('./'),
+      },
+    }))
     .toPromise(Promise)
     .then(config => webpack(config))
-    .then(function (compiler) {
-      compiler.outputFileSystem = options.outputFileSystem || new NodeOutputFileSystem();
+    .then(compiler => {
+      compiler.outputFileSystem = options.outputFileSystem;
 
-      return Promise.fromCallback(cb => compiler.run(cb)).then(stats => ({
-        compiler,
-        stats,
-      }));
+      return Promise.fromCallback(cb => compiler.run(cb))
+        .then(stats => ({ compiler, stats }));
     })
-    .then(function (results) {
-      if (!options.isSilent) {
-        const stats = results.stats.toJson();
-
-        stats.warnings.forEach(gutil.log);
-        stats.errors.forEach(gutil.log);
-      }
-
-      if (!options.noThrow && results.stats.hasErrors()) {
-        throw new gutil.PluginError({
-          message: new Error('webpack detected errors'),
-          plugin: 'space-preconfigured-webpack',
-        });
-      }
-
-      return results;
-    });
+    .then(results => interpretResults(options, results));
 }
 
 function runWebpack(options) {
