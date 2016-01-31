@@ -13,16 +13,29 @@
 const basename = require('./basename');
 const fromPairs = require('lodash/fromPairs');
 const glob = require('ultra-glob');
+const gutil = require('gulp-util');
+const merge = require('lodash/merge');
 const NodeOutputFileSystem = require('webpack/lib/node/NodeOutputFileSystem');
 const path = require('path');
 const Promise = require('bluebird');
 const RxNode = require('rx-node');
 const webpack = require('webpack');
 
+const defaultOptions = {
+  context: process.cwd(), // where to look for packages
+  filesGlobPattern: '*.entry.js', // glob pattern for entry points
+  isSilent: false, // disable console output
+  noThrow: false, // do not throw exceptions
+};
+
 function createFileStream(options) {
   return glob.readableStream(options.filesGlobPattern, {
     cwd: options.context,
   });
+}
+
+function normalizeOptions(options) {
+  return merge({}, defaultOptions, options);
 }
 
 function runFiles(options) {
@@ -54,7 +67,28 @@ function runFiles(options) {
         compiler,
         stats,
       }));
+    })
+    .then(function (results) {
+      if (!options.isSilent) {
+        const stats = results.stats.toJson();
+
+        stats.warnings.forEach(gutil.log);
+        stats.errors.forEach(gutil.log);
+      }
+
+      if (!options.noThrow && results.stats.hasErrors()) {
+        throw new gutil.PluginError({
+          message: new Error('webpack detected errors'),
+          plugin: 'space-preconfigured-webpack',
+        });
+      }
+
+      return results;
     });
 }
 
-module.exports = runFiles;
+function runWebpack(options) {
+  return runFiles(normalizeOptions(options));
+}
+
+module.exports = runWebpack;
