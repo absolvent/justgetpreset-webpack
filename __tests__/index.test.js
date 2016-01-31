@@ -15,7 +15,6 @@ const fs = require('fs');
 const MemoryFileSystem = require('memory-fs');
 const path = require('path');
 // const parallel = require('mocha.parallel');
-// const Promise = require('bluebird');
 const webpack = require('../index');
 
 describe('webpack', function () {
