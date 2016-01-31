@@ -25,6 +25,8 @@ describe('webpack', function () {
     const moduleContext = path.resolve(modulesDir, fixtureModuleName);
 
     it(fixtureModuleName, function () {
+      this.timeout(10000);
+
       return webpack({
         context: moduleContext,
         outputFileSystem: new MemoryFileSystem(),
