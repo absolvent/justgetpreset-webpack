@@ -13,7 +13,7 @@
     "space-preconfigured-eslint": "^1.4.4",
     "space-preconfigured-mocha": "^1.1.1",
     "ultra-glob": "^1.1.1",
-    "webpack": "^2.0.6-beta"
+    "webpack": "1.x"
   },
   "devDependencies": {
     "chai": "^3.5.0",
