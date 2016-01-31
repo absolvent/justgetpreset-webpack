@@ -13,7 +13,6 @@
 
 const assert = require('chai').assert;
 const MemoryFileSystem = require('memory-fs');
-const path = require('path');
 const webpack = require('../../index');
 
 describe('webpack', function () {

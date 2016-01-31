@@ -13,7 +13,10 @@ const eslint = require('space-preconfigured-eslint');
 const mocha = require('space-preconfigured-mocha');
 
 gulp.task('lint', function gulpLintTask() {
-  return eslint('{./__tests__/,./}*.js');
+  return eslint([
+    '__tests__/**/*.test.js',
+    '*.js',
+  ]);
 });
 
 gulp.task('test', ['lint'], function gulpTestTask() {

@@ -12,8 +12,7 @@
 /* global describe: false, it: false */
 
 const assert = require('chai').assert;
-const basename = require('../../basename');
-const path = require('path');
+const basename = require('../basename');
 
 describe('basename', function () {
   it('should strip file extension', function () {
