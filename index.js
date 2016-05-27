@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2016-present, spacekick
+ * @license Copyright (c) 2016-present, lookly
  * All rights reserved.
  *
  * This source code is licensed under the MIT-style license found in the
@@ -38,7 +38,7 @@ function interpretResults(options, results) {
   if (!options.noThrow && results.stats.hasErrors()) {
     throw new gutil.PluginError({
       message: new Error('webpack detected errors'),
-      plugin: 'space-preconfigured-webpack',
+      plugin: 'lookly-preset-webpack',
     });
   }
 

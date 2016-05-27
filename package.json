@@ -10,8 +10,8 @@
     "gulp-util": "^3.0.7",
     "lodash": "^4.1.0",
     "rx-node": "^1.0.1",
-    "space-preconfigured-eslint": "^1.4.4",
-    "space-preconfigured-mocha": "^1.1.1",
+    "lookly-preset-eslint": "^1.4.4",
+    "lookly-preset-mocha": "^1.1.1",
     "ultra-glob": "^1.1.1",
     "webpack": "1.x"
   },
@@ -31,10 +31,10 @@
     "webpack"
   ],
   "main": "index",
-  "name": "space-preconfigured-webpack",
+  "name": "lookly-preset-webpack",
   "repository": {
     "type": "git",
-    "url": "git@github.com:spacekick/space-preconfigured-webpack.git"
+    "url": "git@github.com:lookly/lookly-preset-webpack.git"
   },
   "scripts": {
     "test": "gulp test"
