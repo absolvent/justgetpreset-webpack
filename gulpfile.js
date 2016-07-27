@@ -10,7 +10,7 @@
 
 const gulp = require('gulp');
 const eslint = require('lookly-preset-eslint');
-const mocha = require('lookly-preset-mocha');
+const ava = require('lookly-preset-ava');
 
 gulp.task('lint', function gulpLintTask() {
   return eslint([
@@ -20,5 +20,5 @@ gulp.task('lint', function gulpLintTask() {
 });
 
 gulp.task('test', ['lint'], function gulpTestTask() {
-  return mocha('__tests__/**/*.test.js');
+  return ava('__tests__/**/*.test.js');
 });

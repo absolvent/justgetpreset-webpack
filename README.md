@@ -10,7 +10,7 @@ You can easily attach webpack checker to your gulpfile.
 const gulp = require('gulp');
 const webpack = require('lookly-preset-webpack');
 
-gulp.task('lint', function gulpWebpackTask() {
+gulp.task('webpack', function gulpWebpackTask() {
   return webpack([
     './web_modules/index.entry.js'
   ]);

@@ -10,14 +10,14 @@
     "gulp-util": "^3.0.7",
     "lodash": "^4.1.0",
     "rx-node": "^1.0.1",
-    "lookly-preset-eslint": "^1.4.4",
-    "lookly-preset-mocha": "^1.1.1",
     "ultra-glob": "^1.1.1",
     "webpack": "1.x"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "gulp": "^3.9.0",
+    "lookly-preset-ava": "^1.1.0",
+    "lookly-preset-eslint": "^1.4.4",
     "memory-fs": "^0.3.0",
     "mocha.parallel": "^0.11.2"
   },
