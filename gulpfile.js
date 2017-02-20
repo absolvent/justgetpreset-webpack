@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016-present, lookly
+ * Copyright (c) 2016-present, justgetpreset.com
  * All rights reserved.
  *
  * This source code is licensed under the MIT-style license found in the
@@ -12,13 +12,11 @@ const gulp = require('gulp');
 const eslint = require('lookly-preset-eslint');
 const ava = require('lookly-preset-ava');
 
-gulp.task('lint', function gulpLintTask() {
-  return eslint([
+gulp.task('lint', () =>
+  eslint([
     '__tests__/**/*.test.js',
     '*.js',
-  ]);
-});
+  ])
+);
 
-gulp.task('test', ['lint'], function gulpTestTask() {
-  return ava('__tests__/**/*.test.js');
-});
+gulp.task('test', ['lint'], () => ava('__tests__/**/*.test.js'));
